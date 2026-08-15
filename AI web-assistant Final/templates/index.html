@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Code Genie</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header>
+        <h1>🤖 AI Code Genie</h1>
+        <p>Welcome to AI Code Genie!!</p>
+    </header>
+
+    <!-- Chat Window -->
+    <div id="chat"></div>
+
+    <!-- Loading -->
+    <div id="loading" style="display:none;">
+        🤖 AI is thinking...
+    </div>
+
+</div>
+
+<!-- Fixed Input Area -->
+<div class="input-container">
+
+    <textarea
+        id="prompt"
+        placeholder="Make your wish to AI Code Genie!"
+        rows="4"></textarea>
+
+    <button
+        id="sendBtn"
+        onclick="send()"
+        title="Send">
+
+        <i class="fa-solid fa-paper-plane"></i>
+
+    </button>
+
+    <button
+        id="clearBtn"
+        onclick="clearChat()"
+        title="Clear Chat">
+
+        <i class="fa-solid fa-trash"></i>
+
+    </button>
+
+</div>
+
+<!-- Markdown -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<!-- Highlight.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+<!-- Your Script -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</div>
+
+</body>
+
+</html>
