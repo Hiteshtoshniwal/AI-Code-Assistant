@@ -1,4 +1,4 @@
-# AI Code Assistant(AI Bot Generated)
+# AI Code Assistant
 # 🤖 AI Code Assistant
 
 An AI-powered coding assistant that helps developers understand, generate, debug, and improve code using **Google Gemini API**.
@@ -233,3 +233,6 @@ If you find a bug or have an idea for improving the project, feel free to open a
 ## 📄 License
 
 This project is intended for educational and development purposes.
+
+
+(AI Generated)
