@@ -2,73 +2,60 @@ from google import genai
 from config import GEMINI_API_KEY
 from prompt import SYSTEM_PROMPT
 
+import time
+
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 
 class AIChatBot:
 
-    def ask(self, message, history=None):
-        try:
+    def ask(self, message):
 
-            if history is None:
-                history = []
+        prompt = f"""{SYSTEM_PROMPT}
 
-            conversation = ""
-
-            for item in history:
-
-                role = item.get("role")
-                content = item.get("content", "")
-
-                if role == "user":
-                    conversation += f"""
-User:
-{content}
-
-"""
-
-                elif role == "assistant":
-                    conversation += f"""
-AI Assistant:
-{content}
-
-"""
-
-            conversation += f"""
-User:
+User request:
 {message}
 """
 
-            prompt = f"""
-{SYSTEM_PROMPT}
+        max_retries = 3
 
-{conversation}
+        for attempt in range(max_retries):
 
-Answer the user's latest request using the relevant
-previous conversation as context.
+            try:
 
-If the user refers to previous code using phrases such as
-"this code", "above code", "modify it", "edit it",
-"change it", or "fix it", use the relevant code from
-the conversation history.
+                response = client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=prompt
+                )
 
-Do not ask the user to provide the code again if it is
-already available in the conversation.
+                return response.text
 
-AI Assistant:
-"""
-            response = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=prompt
-            )
+            except Exception as e:
 
-            print(response)
+                print(f"Gemini API error (attempt {attempt + 1}/{max_retries}):")
+                print(e)
 
-            return response.text
+                # Retry temporary server errors
+                if "503" in str(e) or "UNAVAILABLE" in str(e):
 
-        except Exception as e:
+                    if attempt < max_retries - 1:
 
-            import traceback
-            traceback.print_exc()
+                        wait_time = 2 ** attempt
 
-            raise e
+                        print(
+                            f"Gemini temporarily unavailable. "
+                            f"Retrying in {wait_time} seconds..."
+                        )
+
+                        time.sleep(wait_time)
+
+                    else:
+
+                        return (
+                            "Gemini is temporarily unavailable because "
+                            "the model is experiencing high demand. "
+                            "Please try again in a few moments."
+                        )
+
+                else:
+                    raise e
